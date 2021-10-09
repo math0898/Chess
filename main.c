@@ -2,18 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pieces.h"
+#include "game.h"
 
 /**
  * Main.c is the main execution point of chess. For the sake of practice a single command line argument is taken which can specify the side
  * that the player controls. If one is not specified the side is random. 
  * 
  * @return 0 - No errors, exit on game complition.
- * @return 1 - No errors, exited on player entering x.
+ * @return 1 - No errors, exited on player entering exit.
  */
 int main () {
+    Game* game = createGame(0);
     int x = 0;
     printf("%sGame started!%s\n", WHITE_COLOR, NO_COLOR);
     while (x == 0) {
+        displayGame(game);
         char input[10] = { '0' }; 
         scanf("%s", input);
         if (!strcmp(input, "exit")) {

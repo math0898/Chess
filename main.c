@@ -26,6 +26,7 @@ int main () {
             x = 1;
             continue;
         }
+        makeMove(game, move);
     }
     printf("\n");
     return x;

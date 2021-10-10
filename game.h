@@ -63,6 +63,15 @@ char* getString (int piece);
 Move* createMove (int sel[2], int tar[2]);
 
 /**
+ * Makes the given move for the given game. This functions preforms no checks on the given move to
+ * determine its legality and simply carries out the movement.
+ * 
+ * @param game The game this move is taking place in.
+ * @param move The move to take place. 
+ */
+void makeMove (Game* game, Move* move);
+
+/**
  * Creates the actual game object by allocating it on the stack. The returned game is ready to play
  * and has all of the pieces in their starting position. 
  * 

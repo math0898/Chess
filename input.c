@@ -10,6 +10,33 @@
 #endif
 
 /**
+ * This checks if the given move is legal or not. It starts at the first int array
+ * and looks to see if it can move to the second int array.
+ * 
+ * @param game The current game state.
+ * @param sel The piece selected.
+ * @param tar The target location to move the piece.
+ * @return True if and only if the move is legal.
+ */
+int legalMove (Game* game, int sel[2], int tar[2]) {
+    return 1; //todo implement.
+}
+
+/**
+ * This checks if the given selection is legal for the player. In the future it may
+ * need to depend on which player is at the bottom of the map but for now it need
+ * only check if the piece is a white piece.
+ * 
+ * @param game The current game state.
+ * @param sel The selection the legality is being determined.
+ * @return True if the selection is legal, otherwise false.
+ */
+int legalSelection (Game* game, int sel[2]) {
+    if (game->board[sel[1]][sel[0]] >= 10 && game->board[sel[1]][sel[0]] <= 17) return 1;
+    return 0;
+}
+
+/**
  * Prompts the user for a piece selection and a creates a move from their response. 
  * This even checks that the move selected is legal and prompts the user to change
  * parts of it if the move would be otherwise illegal.
@@ -19,9 +46,10 @@
  */
 Move* getMove (Game* game) {
     int c[2] = { -1, -1 };
+    int t[2] = { 0 };
     Move* toReturn = createMove(c, c);
     while (1) {
-        if (toReturn->tar[0] > -1) break; //todo add check for legal move and legal selection.
+        if (toReturn->tar[0] > -1) break; //todo add check for legal move.
         else if (toReturn->sel[0] > -1) {
             game->focused[0] = toReturn->sel[0];
             game->focused[1] = toReturn->sel[1];
@@ -39,16 +67,20 @@ Move* getMove (Game* game) {
             game->focused[0] = -1;
             game->focused[1] = -1;
         } else if (strlen(input) == 2) {
-            int i = ((int) input[0]) - 'a'; 
-            int j = ((int) input[1]) - '1'; //Kind of odd but needed.
-            if (i < 0 || j < 0 || i > 7 || j > 7) printf("     %sSomething seems off about those cooridnates.\n%s", ERROR_COLOR, NO_COLOR);
+            t[0] = ((int) input[0]) - 'a'; 
+            t[1] = ((int) input[1]) - '1'; //Kind of odd but needed.
+            if (t[0] < 0 || t[1] < 0 || t[0] > 7 || t[1] > 7) printf("     %sSomething seems off about those cooridnates.\n%s", ERROR_COLOR, NO_COLOR);
             else {
                 if (toReturn->sel[0] > -1) {
-                    toReturn->tar[0] = i;
-                    toReturn->tar[1] = j;
+                    if (legalMove(game, toReturn->sel, t)) {
+                        toReturn->tar[0] = t[0];
+                        toReturn->tar[1] = t[1];
+                    } else printf("     %sNot a legal move!%s\n", ERROR_COLOR, NO_COLOR);
                 } else {
-                    toReturn->sel[0] = i;
-                    toReturn->sel[1] = j;
+                    if (legalSelection(game, t)) {
+                        toReturn->sel[0] = t[0];
+                        toReturn->sel[1] = t[1];
+                    } else printf("     %sNot a legal piece selection!%s\n", ERROR_COLOR, NO_COLOR);
                 }
             }
         } else printf("     %sEnter the coordinates of the piece to move.%s (e4)\n", ERROR_COLOR, NO_COLOR);

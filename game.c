@@ -48,6 +48,18 @@ Move* createMove (int sel[2], int tar[2]) {
 }
 
 /**
+ * Makes the given move for the given game. This functions preforms no checks on the given move to
+ * determine its legality and simply carries out the movement.
+ * 
+ * @param game The game this move is taking place in.
+ * @param move The move to take place. 
+ */
+void makeMove (Game* game, Move* move) {
+    game->board[move->tar[1]][move->tar[0]] = game->board[move->sel[1]][move->sel[0]];
+    game->board[move->sel[1]][move->sel[0]] = NO_PIECE;
+}
+
+/**
  * Creates the actual game object by allocating it on the stack. The returned game is ready to play
  * and has all of the pieces in their starting position. 
  * 
@@ -86,14 +98,14 @@ Game* createGame (int bot) {
 }
 
 /**
- * Displays the chess board to console using the appropriate colors for each team. //todo implement highlighting of pieces.
+ * Displays the chess board to console using the appropriate colors for each team.
  * 
  * @param game The game that is being printed to console.
  */
 void displayGame (Game* game) {
-    printf("\n\n      a b c d e f g h\n");
+    printf("\n\n    a b c d e f g h\n");
     for (int i = 0; i < 8; i++) {
-        printf("  %d : ", i + 1);
+        printf("  %d ", i + 1);
         for (int j = 0; j < 8; j++) {
             if (game->focused[1] == i && game->focused[0] == j) printf("%s%s %s", BOLD, getString(game->board[i][j]), NO_COLOR);
             else printf("%s ", getString(game->board[i][j]));

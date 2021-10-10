@@ -3,6 +3,7 @@
 #include <string.h>
 #include "pieces.h"
 #include "game.h"
+#include "input.h"
 
 /**
  * Main.c is the main execution point of chess. For the sake of practice a single command line argument is taken which can specify the side
@@ -21,12 +22,12 @@ int main () {
     }
     while (x == 0) {
         displayGame(game);
-        char input[10]; 
-        scanf("%s", input);
-        if (!strcmp(input, "exit")) {
+        Move* move = getMove(game);
+        if (move->exit) {
             x = 1;
             continue;
         }
     }
+    printf("\n");
     return x;
 }

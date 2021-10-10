@@ -31,6 +31,23 @@ char* getString (int piece) {
 }
 
 /**
+ * Creates a new move based on the given int arrays. Used to make sure things are created on the heap
+ * instead of the stack.
+ * 
+ * @param sel The integer array describing the piece to be moved.
+ * @param tar The target position as described by an integer array.
+ */
+Move* createMove (int sel[2], int tar[2]) {
+    Move* toReturn = malloc(sizeof(Move));
+    for (int i = 0; i < 2; i++) {
+        toReturn->sel[i] = sel[i];
+        toReturn->tar[i] = tar[i];
+    }
+    toReturn->exit = 0;
+    return toReturn;
+}
+
+/**
  * Creates the actual game object by allocating it on the stack. The returned game is ready to play
  * and has all of the pieces in their starting position. 
  * 

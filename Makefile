@@ -4,7 +4,7 @@ chess.exe : main.o game.o pieces.h
 	gcc main.o game.o pieces.h -o chess.exe
 
 # Builds main.o, with main.c as a prereq. -c means compile do not link. 
-main.o : main.c
+main.o : main.c pieces.h
 	gcc -c main.c
 
 game.o : game.c pieces.h
@@ -14,3 +14,12 @@ game.o : game.c pieces.h
 clean:
 	@rm -f *.o
 	@rm -f chess.exe
+	@rm -f pieces.h.gch
+	@rm -f debug.exe
+
+# Builds a debugging version of the executable and runs it using gdb.
+debug:
+	gcc -g -c game.c
+	gcc -g -c main.c
+	gcc main.o game.o pieces.h -g -o debug.exe
+	@gdb ./debug.exe

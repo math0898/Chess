@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "game.h"
 #include "pieces.h"
@@ -13,18 +14,18 @@
 char* getString (int piece) {
     char* c = malloc(sizeof(char) * 10);
     if (piece == NO_PIECE) {
-        strcpy(&c, NO_COLOR);
-        strcat(&c, '.');
+        strcpy(c, NO_COLOR);
+        strcat(c, ".");
         return c;
     }
-    piece < 17 ? strcpy(&c, WHITE_COLOR) : strcpy(&c, BLACK_COLOR);
+    piece < 17 ? strcpy(c, WHITE_COLOR) : strcpy(c, BLACK_COLOR);
     switch (piece % 10) {
-        case 1: strcat(&c, 'P'); break;
-        case 2: strcat(&c, 'R'); break;
-        case 3: strcat(&c, 'N'); break;
-        case 4: strcat(&c, 'B'); break;
-        case 5: strcat(&c, 'Q'); break;
-        case 6: strcat(&c, 'K'); break;
+        case 1: strcat(c, "P"); break;
+        case 2: strcat(c, "R"); break;
+        case 3: strcat(c, "N"); break;
+        case 4: strcat(c, "B"); break;
+        case 5: strcat(c, "Q"); break;
+        case 6: strcat(c, "K"); break;
     }
     return c;
 }
@@ -38,37 +39,29 @@ char* getString (int piece) {
  * @return A game that is ready to play and initalized to the starting positions. If for some reason
  *         memory allocation fails this could be NULL.
  */
-Game* createGame (int bot) { //todo reduce scope.
+Game* createGame (int bot) {
     Game* toReturn = malloc(sizeof(Game));
-    if (toReturn) return NULL;
-    for (int i = 0; i < 8; i++) for (int j = 0; j < 8; j++) toReturn->board[i][j] = NO_PIECE;
-    for (int i = 0; i < 8; i++) {
-        if (bot) {
-            toReturn->board[1][i] = BLACK_PAWN;
-            toReturn->board[6][i] = WHITE_PAWN;
-        } else {
-            toReturn->board[1][i] = WHITE_PAWN;
-            toReturn->board[6][i] = BLACK_PAWN; 
-        }
-    }
+    if (toReturn == NULL) return NULL;
     if (bot) {
-        for (int i = 0; i <= 4; i++) {
-            toReturn->board[0][i] = 22 + i; //Black pieces
-            toReturn->board[0][7 - i] = 22 + i;
-            toReturn->board[7][i] = 12 + i; //White pieces
-            toReturn->board[7][7 - i] = 12 + i;
-        }
-        toReturn->board[0][4] = BLACK_KING;
-        toReturn->board[7][4] = WHITE_KING;
+        int temp[8][8] = { {BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK},
+                           {BLACK_PAWN, BLACK_PAWN,   BLACK_PAWN,   BLACK_PAWN,  BLACK_PAWN, BLACK_PAWN,   BLACK_PAWN,   BLACK_PAWN},
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {WHITE_PAWN, WHITE_PAWN,   WHITE_PAWN,   WHITE_PAWN,  WHITE_PAWN, WHITE_PAWN,   WHITE_PAWN,   WHITE_PAWN},
+                           {WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK}};
+        for (int i = 0; i < 8; i++) for (int j = 0; j < 8; j++) toReturn->board[i][j] = temp[i][j];
     } else {
-        for (int i = 0; i <= 4; i++) {
-            toReturn->board[7][i] = 22 + i; //Black pieces
-            toReturn->board[7][7 - i] = 22 + i;
-            toReturn->board[0][i] = 12 + i; //White pieces
-            toReturn->board[0][7 - i] = 12 + i;
-        }
-        toReturn->board[7][4] = BLACK_KING;
-        toReturn->board[0][4] = WHITE_KING;
+        int temp[8][8] = { {WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK},
+                           {WHITE_PAWN, WHITE_PAWN,   WHITE_PAWN,   WHITE_PAWN,  WHITE_PAWN, WHITE_PAWN,   WHITE_PAWN,   WHITE_PAWN},
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE,    NO_PIECE,   NO_PIECE,     NO_PIECE,     NO_PIECE  },
+                           {BLACK_PAWN, BLACK_PAWN,   BLACK_PAWN,   BLACK_PAWN,  BLACK_PAWN, BLACK_PAWN,   BLACK_PAWN,   BLACK_PAWN},
+                           {BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK}};
+        for (int i = 0; i < 8; i++) for (int j = 0; j < 8; j++) toReturn->board[i][j] = temp[i][j];
     }
     toReturn->focused[0] = -1;
     toReturn->focused[1] = -1;
@@ -78,8 +71,16 @@ Game* createGame (int bot) { //todo reduce scope.
 /**
  * Displays the chess board to console using the appropriate colors for each team. //todo implement highlighting of pieces.
  * 
- * @param board The game that is being printed to console.
+ * @param game The game that is being printed to console.
  */
-void displayGame (Game* board) {
-    printf("Uh... in development.\n");
+void displayGame (Game* game) {
+    printf("\n\n      1 2 3 4 5 6 7 8\n");
+    for (int i = 0; i < 8; i++) {
+        printf("  %c : ", 'a' + i);
+        for (int j = 0; j < 8; j++) {
+            printf("%s ", getString(game->board[i][j]));
+        }
+        printf("%s\n", NO_COLOR);
+    }
+    printf("\n");
 }

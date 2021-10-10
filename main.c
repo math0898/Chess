@@ -8,22 +8,25 @@
  * Main.c is the main execution point of chess. For the sake of practice a single command line argument is taken which can specify the side
  * that the player controls. If one is not specified the side is random. 
  * 
+ * @return -1 - Failed to initialize game. Not enough memory.
  * @return 0 - No errors, exit on game complition.
  * @return 1 - No errors, exited on player entering exit.
  */
 int main () {
     Game* game = createGame(0);
     int x = 0;
-    printf("%sGame started!%s\n", WHITE_COLOR, NO_COLOR);
+    if (game == NULL) {
+        printf("Failed to allocate enough memory for the board.\n");
+        return -1;
+    }
     while (x == 0) {
         displayGame(game);
-        char input[10] = { '0' }; 
+        char input[10]; 
         scanf("%s", input);
         if (!strcmp(input, "exit")) {
             x = 1;
             continue;
         }
     }
-    printf("%sGoodbye!%s\n", BLACK_COLOR, NO_COLOR);
     return x;
 }

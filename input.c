@@ -1,12 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "game.h"
+#include "pieces.h"
 
 #ifndef ERROR_COLOR
 #define ERROR_COLOR "\x1b[31m"
-#endif
-#ifndef NO_COLOR
-#define NO_COLOR "\x1b[0m"
 #endif
 
 /**
@@ -19,7 +18,14 @@
  * @return True if and only if the move is legal.
  */
 int legalMove (Game* game, int sel[2], int tar[2]) {
-    return 1; //todo implement.
+    int target = game->board[tar[1]][tar[0]];
+    int source = game->board[sel[1]][sel[0]];
+    if (source % 10 == WHITE_PAWN % 10) {
+        if (target != NO_PIECE && abs(sel[0] - tar[0]) == 1 && sel[1] - tar[1] == (source == WHITE_PAWN ?  -1 : 1)) return 1; // Taking a piece
+        else if (target == NO_PIECE && sel[1] == (source == WHITE_PAWN ? 1 : 6) && abs(sel[1] - tar[1]) == 2 && sel[0] == tar[0]) return 1; // Double move
+        else if (target == NO_PIECE && abs(sel[1] - tar[1]) == 1 && sel[0] == tar[0]) return 1; // Single move
+    }
+    return 0; //todo implement.
 }
 
 /**

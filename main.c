@@ -21,7 +21,6 @@ int main () {
         return -1;
     }
     while (x == 0) {
-        displayGame(game);
         Move* move = getMove(game);
         if (move->exit) {
             x = 1;

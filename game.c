@@ -91,9 +91,9 @@ Game* createGame (int bot) {
  * @param game The game that is being printed to console.
  */
 void displayGame (Game* game) {
-    printf("\n\n      1 2 3 4 5 6 7 8\n");
+    printf("\n\n      a b c d e f g h\n");
     for (int i = 0; i < 8; i++) {
-        printf("  %c : ", 'a' + i);
+        printf("  %d : ", i + 1);
         for (int j = 0; j < 8; j++) {
             printf("%s ", getString(game->board[i][j]));
         }

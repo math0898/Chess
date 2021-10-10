@@ -20,10 +20,21 @@
 int legalMove (Game* game, int sel[2], int tar[2]) {
     int target = game->board[tar[1]][tar[0]];
     int source = game->board[sel[1]][sel[0]];
-    if (source % 10 == WHITE_PAWN % 10) {
+    if (source / 10 == target / 10) return 0; // Can't take own pieces.
+    else if (source % 10 == WHITE_PAWN % 10) {
         if (target != NO_PIECE && abs(sel[0] - tar[0]) == 1 && sel[1] - tar[1] == (source == WHITE_PAWN ?  -1 : 1)) return 1; // Taking a piece
         else if (target == NO_PIECE && sel[1] == (source == WHITE_PAWN ? 1 : 6) && abs(sel[1] - tar[1]) == 2 && sel[0] == tar[0]) return 1; // Double move
         else if (target == NO_PIECE && abs(sel[1] - tar[1]) == 1 && sel[0] == tar[0]) return 1; // Single move
+    } else if (source % 10 == WHITE_ROOK % 10) {
+        if (sel[0] == tar[0]) {
+            for (int i = sel[1]; i <= tar[1]; i++) if (game->board[i][tar[0]] != NO_PIECE) return 0; // Check for piece jumping. 
+            for (int i = sel[1]; i >= tar[1]; i--) if (game->board[i][tar[0]] != NO_PIECE) return 0;
+            return 1;
+        } else if (sel[1] == tar[1]) {
+            for (int i = sel[0]; i <= tar[0]; i++) if (game->board[tar[1]][i] != NO_PIECE) return 0; // Check for piece jumping. 
+            for (int i = sel[0]; i >= tar[0]; i--) if (game->board[tar[1]][i] != NO_PIECE) return 0;
+            return 1;
+        }
     }
     return 0; //todo implement.
 }
@@ -55,7 +66,7 @@ Move* getMove (Game* game) {
     int t[2] = { 0 };
     Move* toReturn = createMove(c, c);
     while (1) {
-        if (toReturn->tar[0] > -1) break; //todo add check for legal move.
+        if (toReturn->tar[0] > -1) break;
         else if (toReturn->sel[0] > -1) {
             game->focused[0] = toReturn->sel[0];
             game->focused[1] = toReturn->sel[1];
@@ -72,7 +83,7 @@ Move* getMove (Game* game) {
             toReturn->sel[1] = -1;
             game->focused[0] = -1;
             game->focused[1] = -1;
-        } else if (strlen(input) == 2) {
+        } else if (strlen(input) == 2) { //todo implement conversion from standard chess moves into this system.
             t[0] = ((int) input[0]) - 'a'; 
             t[1] = ((int) input[1]) - '1'; //Kind of odd but needed.
             if (t[0] < 0 || t[1] < 0 || t[0] > 7 || t[1] > 7) printf("     %sSomething seems off about those cooridnates.\n%s", ERROR_COLOR, NO_COLOR);

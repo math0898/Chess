@@ -29,6 +29,7 @@
 /**
  * The color constants of the two teams.
  */
+#define BOLD "\x1b[1m"
 #define NO_COLOR "\x1b[0m"
 #define WHITE_COLOR "\x1b[34m"
 #define BLACK_COLOR "\x1b[32m"

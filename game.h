@@ -14,7 +14,7 @@ typedef struct game {
 
     /**
      * The coordinates of the position of the board that is currently in focus. This is used by displayGame to
-     * highlight pieces. The array has it stored as (y,x).
+     * highlight pieces. The array has it stored as (x,y).
      */
     int focused[2];
 
@@ -74,7 +74,8 @@ Move* createMove (int sel[2], int tar[2]);
 Game* createGame (int bot);
 
 /**
- * Displays the chess board to console using the appropriate colors for each team.
+ * Displays the chess board to console using the appropriate colors for each team. Additionally if a 
+ * board position is specified under game->focused it will be highlighted in bold.
  * 
  * @param game The game that is being printed to console.
  */

@@ -34,11 +34,13 @@ Move* getMove (Game* game) {
             toReturn->exit = 1;
             break;
         } else if (strcmp(input, "back") == 0) {
-            toReturn->sel[0] = c[0];
-            toReturn->sel[1] = c[0];
+            toReturn->sel[0] = -1;
+            toReturn->sel[1] = -1;
+            game->focused[0] = -1;
+            game->focused[1] = -1;
         } else if (strlen(input) == 2) {
-            int i = ((int) input[0]) - 'a';
-            int j = ((int) input[1]) - '0';
+            int i = ((int) input[0]) - 'a'; 
+            int j = ((int) input[1]) - '1'; //Kind of odd but needed.
             if (i < 0 || j < 0 || i > 7 || j > 7) printf("     %sSomething seems off about those cooridnates.\n%s", ERROR_COLOR, NO_COLOR);
             else {
                 if (toReturn->sel[0] > -1) {
@@ -51,5 +53,7 @@ Move* getMove (Game* game) {
             }
         } else printf("     %sEnter the coordinates of the piece to move.%s (e4)\n", ERROR_COLOR, NO_COLOR);
     }
+    game->focused[0] = -1;
+    game->focused[1] = -1;
     return toReturn;
 }
